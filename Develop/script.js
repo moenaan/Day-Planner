@@ -1,87 +1,61 @@
-//add time blocks, in one hour increments from 9am to 5pm, each block has a save button on the right hand side that saves the info entered to local storage
+// using moment.js to display current date
+$("#currentDay").text(moment().format("MMMM Do YYYY,"))
 
-//add current day at the top of the planner (moment)
-var currentTime = moment().format("MMMM Do YYYY");
-$("#currentDay").text(currentTime);
 
-//variables for now (as a baseline time, use moment) and HTML time block (to change color relative to now)
-var timeBlock = $(".hour");
-var now = parseInt(moment().format("H"));
+var currentTime = moment().format("LT");
+$("#currentTime").append(currentTime);
 
-//function to check each hour block to see if it is past (gray), present (red), or future (green).
-$.each(timeBlock, function (i, hour) {
-  var hourId = parseInt($(this).attr("id"));
-  if (hourId === now) {
-    $(this).next().addClass("present");
-  } else if (hourId < now) {
-    $(this).next().addClass("past");
-  } else if (hourId > now) {
-    $(this).next().addClass("future");
-  }
+// function for saving schedule to localStorage
+$(".saveBtn").on("click", function() {
+    
+    var value = $(this).siblings(".description").val();
+    var time = $(this).parent().attr("id");
+
+    
+    localStorage.setItem(time,value);
 });
 
-hourUpdater();
-//text area, class = "event"; if Save button clicked, set item to local storage and persist; upon refresh, need to get item from local storage too
+// function to show color timeblocks based on current time
+function updateHour() {
+  
+    
+  var currentHour = moment().hours();
 
-$(".saveBtn").on("click", function (event) {
-  var calendarItem =
-    event.target.parentElement.previousElementSibling.children[0].value;
-  localStorage.setItem(event.target.attributes[0].value, calendarItem);
-});
+  // loop over time blocks
+  $('.time-block').each(function () {
+    var blockHour = parseInt($(this).attr('id').split('-')[1]);
 
-$(document).ready(function () {
-  if (localStorage["9am"] !== null && localStorage["9am"] !== undefined) {
-    var nineAm = $("<p>" + localStorage["9am"] + "</p>");
-    $("#nineAm").append(nineAm[0].innerText);
-  } else {
-    ("");
-  }
-  if (localStorage["10am"] !== null && localStorage["10am"] !== undefined) {
-    var tenAm = $("<p>" + localStorage["10am"] + "</p>");
-    $("#tenAm").append(tenAm[0].innerText);
-  } else {
-    ("");
-  }
-  if (localStorage["11am"] !== null && localStorage["11am"] !== undefined) {
-    var elevenAm = $("<p>" + localStorage["11am"] + "</p>");
-    $("#elevenAm").append(elevenAm[0].innerText);
-  } else {
-    ("");
-  }
-  if (localStorage["12pm"] !== null && localStorage["12pm"] !== undefined) {
-    var twelvePm = $("<p>" + localStorage["12pm"] + "</p>");
-    $("#twelvePm").append(twelvePm[0].innerText);
-  } else {
-    ("");
-  }
-  if (localStorage["1pm"] !== null && localStorage["1pm"] !== undefined) {
-    var onePm = $("<p>" + localStorage["1pm"] + "</p>");
-    $("#onePm").append(onePm[0].innerText);
-  } else {
-    ("");
-  }
-  if (localStorage["2pm"] !== null && localStorage["2pm"] !== undefined) {
-    var twoPm = $("<p>" + localStorage["2pm"] + "</p>");
-    $("#twoPm").append(twoPm[0].innerText);
-  } else {
-    ("");
-  }
-  if (localStorage["3pm"] !== null && localStorage["3pm"] !== undefined) {
-    var threePm = $("<p>" + localStorage["3pm"] + "</p>");
-    $("#threePm").append(threePm[0].innerText);
-  } else {
-    ("");
-  }
-  if (localStorage["4pm"] !== null && localStorage["4pm"] !== undefined) {
-    var fourPm = $("<p>" + localStorage["4pm"] + "</p>");
-    $("#fourPm").append(fourPm[0].innerText);
-  } else {
-    ("");
-  }
-  if (localStorage["5pm"] !== null && localStorage["5pm"] !== undefined) {
-    var fivePm = $("<p>" + localStorage["5pm"] + "</p>");
-    $("#fivePm").append(fivePm[0].innerText);
-  } else {
-    ("");
-  }
-});  
+    // updating color based on time 
+    if (blockHour < currentHour) {
+     $(this).addClass("past");
+      $(this).removeClass("future");
+      $(this).removeClass("present");
+    } 
+    else if (blockHour === currentHour) {
+      $(this).removeClass("past");
+      $(this).addClass("present");
+      $(this).removeClass("future");
+    } 
+     else{
+      $(this).removeClass("past");
+      $(this).removeClass("present");
+      $(this).addClass("future");
+    }
+  });
+}
+
+updateHour();
+
+
+// getting from local storage
+$("9.description").val(localStorage.getItem("9")); 
+$("10.description").val(localStorage.getItem("10")); 
+$("11.description").val(localStorage.getItem("11")); 
+$("12.description").val(localStorage.getItem("12"));
+$("13.description").val(localStorage.getItem("13"));
+$("14.description").val(localStorage.getItem("14"));
+$("15.description").val(localStorage.getItem("15"));
+$("16.description").val(localStorage.getItem("16"));
+$("17.description").val(localStorage.getItem("17"));
+
+
