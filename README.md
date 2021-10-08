@@ -1,1 +1,2 @@
 # Day-Planner
+An application that allows the user to make a schedule and save to localStorage. User is able to check back and see all the saved tasks. User is able to add and delete data. User is able to save schedule and check back any time.
